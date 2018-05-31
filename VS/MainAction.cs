@@ -79,7 +79,7 @@ namespace CatchMeIfYouCan
                 GameField.game_field[(int)(enemy.location.X / picSize), (int)(enemy.location.Y / picSize)].IsOccupied = true;
                 Object obj = enemy;
 
-                System.Threading.Timer Eatting = new System.Threading.Timer(EnemyDisappear, obj, 5000, 3000); // Вызываем таймер съедения растений
+                System.Threading.Timer Eatting = new System.Threading.Timer(EnemyDisappear, obj, 4500, 3000); // Вызываем таймер съедения растений
 
                 DeadLockComingSoon.Add(Eatting);
             }
