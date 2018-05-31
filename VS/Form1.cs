@@ -35,10 +35,12 @@ namespace CatchMeIfYouCan
         {
             if (mainAction != null)
             {
+                mainAction.EventEnemyCountChange -= new DelegateEnemyEventHandler(EnemyCountChange_EventHandler);
                 mainAction.EventPlantCountChange -= new DelegatePlantEventHandler(PlantCountChange_EventHandler);
             }
             this.mainAction = new MainAction(this.start, this.Frame, this.PictureBoxGraph, this.BitmapGraph, (int)numericUpDown1.Value, (int)numericUpDown2.Value);
 
+            mainAction.EventEnemyCountChange += new DelegateEnemyEventHandler(EnemyCountChange_EventHandler);
             mainAction.EventPlantCountChange += new DelegatePlantEventHandler(PlantCountChange_EventHandler);
             mainAction.StartGame();
 
@@ -47,7 +49,7 @@ namespace CatchMeIfYouCan
 
         private void EnemyCountChange_EventHandler(int sender)
         {
-
+            textBoxEnemyCount.Invoke(new Action(() => textBoxEnemyCount.Text = sender.ToString()));
         }
        
         private void PlantCountChange_EventHandler(int sender)

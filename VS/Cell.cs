@@ -125,7 +125,49 @@ namespace CatchMeIfYouCan
 
     class Enemy : Main
     {
-        
+        public bool IsAlive = true;
+
+        public Enemy(int game_fieldI, int game_fieldJ)
+        {
+            this.image = Image.FromFile(@"enemy.png");
+            this.location = RandomLocation(game_fieldI, game_fieldJ);
+            this.IsAlive = true;
+        }
+
+        public static Point RandomLocation(int game_fieldI, int game_fieldJ)
+        {
+
+            Random rand1 = new Random((int)DateTime.Now.Ticks);
+            Random rand2 = new Random((int)DateTime.Now.Millisecond * rand1.Next(- game_fieldI, game_fieldJ));
+
+            int i = Math.Abs(rand1.Next(0, game_fieldI));
+            int j = Math.Abs(rand2.Next(0, game_fieldJ));
+
+            Point point = new Point(i * picSize, j * picSize);
+
+            return point;
+        }
+
+        public void Enemy_Paint(Graphics PictureBoxGraph, Graphics BitmapGraph, Bitmap Frame, int X, int Y)
+        {
+            bool u = false;
+            
+            do
+            {
+                try
+                {
+                    BitmapGraph.DrawImage(image, X, Y, picSize, picSize);
+                    PictureBoxGraph.DrawImage(Frame, 0, 0);
+                    u = true;
+                }
+                catch (InvalidOperationException)//Экзепшн который вылетает при допросе
+                {
+                    System.Threading.Thread.Sleep(1);
+                    u = false;
+                }
+            }
+            while (!u);
+        }
     }
 
     class Man : Main

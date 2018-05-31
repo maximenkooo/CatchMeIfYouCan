@@ -6,12 +6,4 @@ C:\Users\User\Desktop\ТП\GIT\krot - for git.2.0\VS\obj\Debug\CatchMeIfYouCan.P
 C:\Users\User\Desktop\ТП\GIT\krot - for git.2.0\VS\obj\Debug\VS.csproj.GenerateResource.Cache
 C:\Users\User\Desktop\ТП\GIT\krot - for git.2.0\VS\obj\Debug\CatchMeIfYouCan.exe
 C:\Users\User\Desktop\ТП\GIT\krot - for git.2.0\VS\obj\Debug\CatchMeIfYouCan.pdb
-C:\Users\User\Desktop\ТП\GIT\krot - for git.1.0\VS\bin\Debug\CatchMeIfYouCan.exe.config
-C:\Users\User\Desktop\ТП\GIT\krot - for git.1.0\VS\obj\Debug\CatchMeIfYouCan.exe
-C:\Users\User\Desktop\ТП\GIT\krot - for git.1.0\VS\obj\Debug\CatchMeIfYouCan.pdb
-C:\Users\User\Desktop\ТП\GIT\krot - for git.1.0\VS\bin\Debug\CatchMeIfYouCan.exe
-C:\Users\User\Desktop\ТП\GIT\krot - for git.1.0\VS\bin\Debug\CatchMeIfYouCan.pdb
-C:\Users\User\Desktop\ТП\GIT\krot - for git.1.0\VS\obj\Debug\CatchMeIfYouCan.Form1.resources
-C:\Users\User\Desktop\ТП\GIT\krot - for git.1.0\VS\obj\Debug\CatchMeIfYouCan.Properties.Resources.resources
-C:\Users\User\Desktop\ТП\GIT\krot - for git.1.0\VS\obj\Debug\VS.csproj.GenerateResource.Cache
-C:\Users\User\Desktop\ТП\GIT\krot - for git.1.0\VS\obj\Debug\VS.csprojResolveAssemblyReference.cache
+C:\Users\User\Desktop\ТП\GIT\krot - for git.2.0\VS\obj\Debug\VS.csprojResolveAssemblyReference.cache
