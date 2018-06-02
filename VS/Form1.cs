@@ -74,9 +74,38 @@ namespace CatchMeIfYouCan
 
         private void MainFrame_KeyDown_EventHandler(object sender, PreviewKeyDownEventArgs e)
         {
-            
-        }
+            int currentKey = e.KeyValue;
+            switch (currentKey)
+            {
+                case 37:    //левая
+                    {
+                        mainAction.Move('L');
+                        break;
+                    }
+                case 39:    //правая
+                    {
+                        mainAction.Move('R');
+                        break;
+                    }
+                case 38:    //вперед
+                    {
+                        mainAction.Move('W');
+                        break;
+                    }
+                case 40:    //вниз
+                    {
+                        mainAction.Move('S');
+                        break;
+                    }
+                case 32:    //space
+                    {
+                        mainAction.Move('K');
+                        break;
+                    }
+            }
 
+
+        }
         private void numericUpDown1_Enter_EventHandler(object sender, EventArgs e) //N
         {
             pictureBox1.Focus();
@@ -96,10 +125,6 @@ namespace CatchMeIfYouCan
 
         }
 
-        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
-        {
-
-        }
     }
 
 }
