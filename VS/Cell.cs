@@ -25,10 +25,10 @@ namespace CatchMeIfYouCan
             return gallery;
         }
     }
-
-    class GameField : Counts // Field - поле, Cell - клетка
+    
+    class GameField : Counts // Field - поле
     {
-        public Cell[,] game_field; 
+        public Cell[,] game_field; // Cell - клетка
         public int field_sizeI;
         public int field_sizeJ;
         public int plantCount;
@@ -94,9 +94,7 @@ namespace CatchMeIfYouCan
                 PictureBoxGraph.DrawImage(Frame, 0, 0);
             }
             catch (Exception e)
-            { 
-            
-            }
+            { }
         }
     }
 
