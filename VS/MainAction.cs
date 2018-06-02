@@ -9,12 +9,12 @@ using System.Drawing.Drawing2D;
 
 namespace CatchMeIfYouCan
 {
-    public delegate void DelegateEnemyEventHandler(int sender); 
+    public delegate void DelegateEnemyEventHandler(int sender); //Delegate. Доступен из любой точки кода.
     public delegate void DelegatePlantEventHandler(int sender);
 
     public class MainAction
     {
-        public event DelegateEnemyEventHandler EventEnemyCountChange; 
+        public event DelegateEnemyEventHandler EventEnemyCountChange; // Event. Для класса он как поле.
         public event DelegatePlantEventHandler EventPlantCountChange;
 
         private System.Threading.Timer Tms;
@@ -31,6 +31,8 @@ namespace CatchMeIfYouCan
         public int EnemyCount = 0;
         public int EnemyCreated = 0;
         public int PlantCount = 0;
+
+        private bool winning = false;
 
         private const int picSize = 80;
 
@@ -79,7 +81,7 @@ namespace CatchMeIfYouCan
                 GameField.game_field[(int)(enemy.location.X / picSize), (int)(enemy.location.Y / picSize)].IsOccupied = true;
                 Object obj = enemy;
 
-                System.Threading.Timer Eatting = new System.Threading.Timer(EnemyDisappear, obj, 4500, 3000); // Вызываем таймер съедения растений
+                System.Threading.Timer Eatting = new System.Threading.Timer(EnemyDisappear, obj, 5000, 3000); // Вызываем таймер съедения растений
 
                 DeadLockComingSoon.Add(Eatting);
             }
@@ -185,9 +187,55 @@ namespace CatchMeIfYouCan
             Tms = new System.Threading.Timer(EnemyAppear, null, 1000, 1000);
         }
 
-        public void Move()
+        public void Move(char Ch)
         {
-            
+            char currentKey = Ch;
+            switch (currentKey)
+            {
+                case 'L':    //левая
+                    {
+                        if (Man.location.X != 0)
+                        {
+                            Man.location.X -= picSize;
+                        }
+                        Man.image = Image.FromFile(@"man left.PNG");
+                        break;
+                    }
+                case 'R':    //правая
+                    {
+                        if (Man.location.X != ((GameField.field_sizeI - 1) * picSize))
+                        {
+                            Man.location.X += picSize;
+                        }
+                        Man.image = Image.FromFile(@"man.PNG");
+                        break;
+                    }
+                case 'W':    //вперед
+                    {
+                        if (Man.location.Y != 0)
+                        {
+                            Man.location.Y -= picSize;
+                        }
+                        break;
+                    }
+                case 'S':    //вниз
+                    {
+                        if (Man.location.Y != ((GameField.field_sizeJ - 1) * picSize))
+                        {
+                            Man.location.Y += picSize;
+                        }
+                        break;
+                    }
+                case 'K':
+                    {
+                        Killing(Man);
+                        break;
+                    }
+            }
+
+            GameField.Game_Field_Paint(PictureBoxGraph, BitmapGraph, Frame);
+            AllEnemiesPaint();
+            Man.Man_Paint(PictureBoxGraph, BitmapGraph, Frame, Man.location.X, Man.location.Y);
         }
     }
 }
