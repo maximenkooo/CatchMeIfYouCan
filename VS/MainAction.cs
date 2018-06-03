@@ -32,7 +32,7 @@ namespace CatchMeIfYouCan
 
         public int EnemyCount = 0;
         public int EnemyCreated = 0;
-        public int PlantCount = 0;
+        public int FoodCount = 0;
 
         private bool winning = false;
 
@@ -43,7 +43,7 @@ namespace CatchMeIfYouCan
         public MainAction(Button startGameButton, Bitmap Frame, Graphics PictureBoxGraph, Graphics BitmapGraph, int gameFieldI, int gamefieldJ) //Конструктор
         {
             this.GameField = new GameField(gameFieldI, gamefieldJ);
-            this.PlantCount = this.GameField.plantCount;
+            this.FoodCount = this.GameField.foodcount;
             this.PictureBoxGraph = PictureBoxGraph;
             this.BitmapGraph = BitmapGraph;
             this.Frame = Frame;
@@ -115,17 +115,17 @@ namespace CatchMeIfYouCan
             {
                 GameField.game_field[(int)(tempEnemy.location.X / picSize), (int)(tempEnemy.location.Y / picSize)].image = Image.FromFile(@"cell_grace.png");
 
-                if (GameField.game_field[(int)(tempEnemy.location.X / picSize), (int)(tempEnemy.location.Y / picSize)].IsPlant) 
-                    PlantCount--;
-                    EventPlantCountChange(PlantCount);
+                if (GameField.game_field[(int)(tempEnemy.location.X / picSize), (int)(tempEnemy.location.Y / picSize)].IsPlant)
+                    FoodCount--;
+                    EventPlantCountChange(FoodCount);
                 GameField.game_field[(int)(tempEnemy.location.X / picSize), (int)(tempEnemy.location.Y / picSize)].IsEatten = true;
 
-                if ((PlantCount == 0))
+                if ((FoodCount == 0))
                 {
                     EventEndGame(this, new MyEventArg (this));
                 }
 
-                if (PlantCount != 0)
+                if (FoodCount != 0)
                 {
                     Point oldXY = tempEnemy.location;
                     Relocation(tempEnemy);/// рандомить вредителя на новую клетку                    
@@ -200,7 +200,7 @@ namespace CatchMeIfYouCan
             foreach (System.Threading.Timer Dead in DeadLockComingSoon ) Dead.Dispose();
             EnemyCreated = 0;
             EnemyCount = 0;
-            PlantCount = (int)(GameField.field_sizeI * GameField.field_sizeJ / 3);
+            FoodCount = (int)(GameField.field_sizeI * GameField.field_sizeJ / 3);
 
         }
 
@@ -210,7 +210,7 @@ namespace CatchMeIfYouCan
 
             GameField.Game_Field_Paint(PictureBoxGraph, BitmapGraph, Frame);
             Man.Man_Paint(PictureBoxGraph, BitmapGraph, Frame, 0, 0);
-            EventPlantCountChange(PlantCount);
+            EventPlantCountChange(FoodCount);
             Tms = new System.Threading.Timer(EnemyAppear, null, 1000, 1000);
         }
 

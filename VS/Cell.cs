@@ -34,14 +34,14 @@ namespace CatchMeIfYouCan
         public Cell[,] game_field; // Cell - клетка
         public int field_sizeI;
         public int field_sizeJ;
-        public int plantCount;
+        public int foodcount/*plantCount*/;
 
         public GameField(int field_sizeI, int field_sizeJ)
         { 
             this.field_sizeI = field_sizeI;
             this.field_sizeJ = field_sizeJ;
             this.game_field = new Cell[field_sizeI, field_sizeJ];
-            this.plantCount = (int) (field_sizeI * field_sizeJ / 3);
+            this.foodcount = (int) (field_sizeI * field_sizeJ / 3);
         }
 
         private Point Random(int key)
@@ -61,7 +61,7 @@ namespace CatchMeIfYouCan
         {
             Point point;
 
-            for (int t = 0; t < plantCount; t++)
+            for (int t = 0; t < foodcount; t++)
             {
                 do
                     point = Random((int)DateTime.Now.Ticks);
