@@ -18,8 +18,11 @@ namespace CatchMeIfYouCan
             if (gallery == null)
             {
                 gallery = new Image[3];
+
                 gallery[0] = Image.FromFile(@"cell_food.png"); // 1 stage
+
                 gallery[1] = Image.FromFile(@"cell_grace.png"); // 2 stage
+
                 gallery[2] = Image.FromFile(@"cell_digged.png"); // 3 stage
             }
             return gallery;
@@ -132,7 +135,7 @@ namespace CatchMeIfYouCan
             this.IsAlive = true;
         }
 
-        public static Point RandomLocation(int game_fieldI, int game_fieldJ)
+        public static Point RandomLocation(int game_fieldI, int game_fieldJ) 
         {
 
             Random rand1 = new Random((int)DateTime.Now.Ticks);

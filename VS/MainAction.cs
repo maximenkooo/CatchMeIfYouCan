@@ -11,16 +11,18 @@ namespace CatchMeIfYouCan
 {
     public delegate void DelegateEnemyEventHandler(int sender); //Delegate. Доступен из любой точки кода.
     public delegate void DelegatePlantEventHandler(int sender);
+    public delegate void DelegateEndEventHandler(object sender, MyEventArg Arg);
 
     public class MainAction
     {
         public event DelegateEnemyEventHandler EventEnemyCountChange; // Event. Для класса он как поле.
         public event DelegatePlantEventHandler EventPlantCountChange;
+        public event DelegateEndEventHandler EventEndGame;
 
         private System.Threading.Timer Tms;
         private System.Threading.Timer Eatting;
         static List<System.Threading.Timer> DeadLockComingSoon = new List<System.Threading.Timer>();
-
+        
         private Graphics PictureBoxGraph;
         private Graphics BitmapGraph;
         private Bitmap Frame;
@@ -46,7 +48,7 @@ namespace CatchMeIfYouCan
             this.BitmapGraph = BitmapGraph;
             this.Frame = Frame;
         }
-
+        
         private void InitializeMyComponent()
         {
             GameField.Game_Field_Init();
@@ -56,12 +58,27 @@ namespace CatchMeIfYouCan
 
         private void Killing(Man man)
         {
+            for (int i = 0; i < EnemyList.Count(); i++)
+            {
+                if ((man.location == EnemyList[i].location) && (EnemyList[i].IsAlive))
+                {
+                    EnemyList[i].IsAlive = false;
+                    GameField.game_field[EnemyList[i].location.X / picSize, EnemyList[i].location.Y / picSize].IsOccupied = false;
+                    AllEnemiesPaint();
+                    EnemyCount--;
+                    EventEnemyCountChange(EnemyCount);
+                }
+            }
 
+            if ((EnemyCount == 0) && (EnemyCreated == 10))
+            {  
+                EventEndGame(this, new MyEventArg(this));
+            }
         }
 
         private void EnemyAppear(object jbj)
         {
-            if (EnemyCreated == 49)
+            if (EnemyCreated == 10)
             {
                 Tms.Dispose();
             }
@@ -72,6 +89,9 @@ namespace CatchMeIfYouCan
                 EnemyCreated++;
                 EnemyCount++;
                 EventEnemyCountChange(EnemyCount);
+
+               // textBoxEnemyCount.Invoke(new Action(() => = Convert.ToString(EnemyCount + EnemyCreated));
+               //textBoxEnemyCount.Text = Convert.ToString(EnemyCount + EnemyCreated);// не работает
 
                 EnemyList.Add(enemy);
                 Relocation(enemy);
@@ -86,23 +106,23 @@ namespace CatchMeIfYouCan
                 DeadLockComingSoon.Add(Eatting);
             }
         }
-
+       
         private void EnemyDisappear(Object enemy)
         {
             Enemy tempEnemy = (enemy as Enemy);
 
             if (tempEnemy.IsAlive)
             {
-                GameField.game_field[(int)(tempEnemy.location.X / picSize), (int)(tempEnemy.location.Y / picSize)].image = Image.FromFile(@"cell_digged.png");
+                GameField.game_field[(int)(tempEnemy.location.X / picSize), (int)(tempEnemy.location.Y / picSize)].image = Image.FromFile(@"cell_grace.png");
 
-                if (GameField.game_field[(int)(tempEnemy.location.X / picSize), (int)(tempEnemy.location.Y / picSize)].IsPlant)
+                if (GameField.game_field[(int)(tempEnemy.location.X / picSize), (int)(tempEnemy.location.Y / picSize)].IsPlant) 
                     PlantCount--;
-                EventPlantCountChange(PlantCount);
+                    EventPlantCountChange(PlantCount);
                 GameField.game_field[(int)(tempEnemy.location.X / picSize), (int)(tempEnemy.location.Y / picSize)].IsEatten = true;
 
                 if ((PlantCount == 0))
-
                 {
+                    EventEndGame(this, new MyEventArg (this));
                 }
 
                 if (PlantCount != 0)
@@ -120,7 +140,7 @@ namespace CatchMeIfYouCan
             }
             else DeadLockComingSoon.Remove(Eatting);
         }
-
+       
         private void Relocation(Enemy enemy)
         {
             enemy.location = Enemy.RandomLocation(GameField.field_sizeI, GameField.field_sizeJ);
@@ -132,29 +152,36 @@ namespace CatchMeIfYouCan
             }
             GameField.game_field[(int)(enemy.location.X / picSize), (int)(enemy.location.Y / picSize)].IsOccupied = true;
         }
-
+      
         private void AllEnemiesPaint()
         {
-            foreach (Enemy el in EnemyList)
+            try
             {
-                bool flag = false;
-
-                do
+                foreach (Enemy el in EnemyList)
                 {
-                    try
+                    bool flag = false;
+
+                    do
                     {
-                        if (el.IsAlive)
+                        try
                         {
-                            BitmapGraph.DrawImage(el.image, el.location.X, el.location.Y, picSize, picSize);
+                            if (el.IsAlive)
+                            {
+                                BitmapGraph.DrawImage(el.image, el.location.X, el.location.Y, picSize, picSize);
+                            }
+                            flag = true;
                         }
-                        flag = true;
+                        catch (InvalidOperationException)
+                        {
+                            System.Threading.Thread.Sleep(5);
+                        }
                     }
-                    catch (InvalidOperationException)
-                    {
-                        System.Threading.Thread.Sleep(5);
-                    }
+                    while (flag == false);
                 }
-                while (flag == false);
+            }
+            catch (InvalidOperationException e)
+            {
+            
             }
             try
             {
@@ -170,7 +197,7 @@ namespace CatchMeIfYouCan
         {
             EnemyList.Clear();
             DeadLockComingSoon.Clear();
-            foreach (System.Threading.Timer Dead in DeadLockComingSoon) Dead.Dispose();
+            foreach (System.Threading.Timer Dead in DeadLockComingSoon ) Dead.Dispose();
             EnemyCreated = 0;
             EnemyCount = 0;
             PlantCount = (int)(GameField.field_sizeI * GameField.field_sizeJ / 3);
@@ -228,14 +255,17 @@ namespace CatchMeIfYouCan
                     }
                 case 'K':
                     {
-                        Killing(Man);
+                        Killing( Man);
                         break;
                     }
             }
-
             GameField.Game_Field_Paint(PictureBoxGraph, BitmapGraph, Frame);
             AllEnemiesPaint();
             Man.Man_Paint(PictureBoxGraph, BitmapGraph, Frame, Man.location.X, Man.location.Y);
+            
+           // MainFrame.Focus();
+
         }
+    
     }
 }
