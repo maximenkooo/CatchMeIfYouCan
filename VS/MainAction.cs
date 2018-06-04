@@ -10,13 +10,13 @@ using System.Drawing.Drawing2D;
 namespace CatchMeIfYouCan
 {
     public delegate void DelegateEnemyEventHandler(int sender); //Delegate. Доступен из любой точки кода.
-    public delegate void DelegatePlantEventHandler(int sender);
+    public delegate void DelegateFoodEventHandler(int sender);
     public delegate void DelegateEndEventHandler(object sender, MyEventArg Arg);
 
     public class MainAction
     {
         public event DelegateEnemyEventHandler EventEnemyCountChange; // Event. Для класса он как поле.
-        public event DelegatePlantEventHandler EventPlantCountChange;
+        public event DelegateFoodEventHandler EventFoodCountChange;
         public event DelegateEndEventHandler EventEndGame;
 
         private System.Threading.Timer Tms;
@@ -43,7 +43,7 @@ namespace CatchMeIfYouCan
         public MainAction(Button startGameButton, Bitmap Frame, Graphics PictureBoxGraph, Graphics BitmapGraph, int gameFieldI, int gamefieldJ) //Конструктор
         {
             this.GameField = new GameField(gameFieldI, gamefieldJ);
-            this.FoodCount = this.GameField.foodcount;
+            this.FoodCount = this.GameField.foodCount;
             this.PictureBoxGraph = PictureBoxGraph;
             this.BitmapGraph = BitmapGraph;
             this.Frame = Frame;
@@ -115,9 +115,9 @@ namespace CatchMeIfYouCan
             {
                 GameField.game_field[(int)(tempEnemy.location.X / picSize), (int)(tempEnemy.location.Y / picSize)].image = Image.FromFile(@"cell_grace.png");
 
-                if (GameField.game_field[(int)(tempEnemy.location.X / picSize), (int)(tempEnemy.location.Y / picSize)].IsPlant)
+                if (GameField.game_field[(int)(tempEnemy.location.X / picSize), (int)(tempEnemy.location.Y / picSize)].IsFood) 
                     FoodCount--;
-                    EventPlantCountChange(FoodCount);
+                    EventFoodCountChange(FoodCount);
                 GameField.game_field[(int)(tempEnemy.location.X / picSize), (int)(tempEnemy.location.Y / picSize)].IsEatten = true;
 
                 if ((FoodCount == 0))
@@ -210,7 +210,7 @@ namespace CatchMeIfYouCan
 
             GameField.Game_Field_Paint(PictureBoxGraph, BitmapGraph, Frame);
             Man.Man_Paint(PictureBoxGraph, BitmapGraph, Frame, 0, 0);
-            EventPlantCountChange(FoodCount);
+            EventFoodCountChange(FoodCount);
             Tms = new System.Threading.Timer(EnemyAppear, null, 1000, 1000);
         }
 

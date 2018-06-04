@@ -14,7 +14,7 @@ using System.IO;
 namespace CatchMeIfYouCan
 {
 
-    public partial class Form1 : Form
+    public partial class CatchMeIfYouCan : Form
     {
         public const int picSize = 80;
         MainAction mainAction = null;
@@ -23,7 +23,7 @@ namespace CatchMeIfYouCan
         Bitmap Frame;
         Graphics PictureBoxGraph;
 
-        public Form1()
+        public CatchMeIfYouCan()
         {
             InitializeComponent();
             MainFrame = pictureBox1;
@@ -36,12 +36,13 @@ namespace CatchMeIfYouCan
             if (mainAction != null)
             {
                 mainAction.EventEnemyCountChange -= new DelegateEnemyEventHandler(EnemyCountChange_EventHandler);
-                mainAction.EventPlantCountChange -= new DelegatePlantEventHandler(PlantCountChange_EventHandler);
+                mainAction.EventFoodCountChange -= new DelegateFoodEventHandler(PlantCountChange_EventHandler);
             }
             this.mainAction = new MainAction(this.start, this.Frame, this.PictureBoxGraph, this.BitmapGraph, (int)numericUpDown1.Value, (int)numericUpDown2.Value);
 
             mainAction.EventEnemyCountChange += new DelegateEnemyEventHandler(EnemyCountChange_EventHandler);
-            mainAction.EventPlantCountChange += new DelegatePlantEventHandler(PlantCountChange_EventHandler);
+            mainAction.EventFoodCountChange += new DelegateFoodEventHandler(PlantCountChange_EventHandler);
+            mainAction.EventEndGame += new DelegateEndEventHandler(EndGame_EventHandler);
             mainAction.StartGame();
 
             pictureBox1.Focus();
@@ -117,7 +118,14 @@ namespace CatchMeIfYouCan
 
         public void EndGame_EventHandler(object sender, MyEventArg Arg)
         {
-            
+            string str="";
+            if (Arg.mainAction.EnemyCount == 0) str = "Congratulate! You win!";
+            if (Arg.mainAction.FoodCount == 0) str = "Sorry! You lost!";
+            if (MessageBox.Show(str + "\nPlay again??", "", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                Arg.mainAction.Clearing();
+                Arg.mainAction.StartGame();
+            }
         }
 
         private void textBoxEnemyCount_TextChanged(object sender, EventArgs e)

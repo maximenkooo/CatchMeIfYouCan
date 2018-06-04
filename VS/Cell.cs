@@ -34,14 +34,14 @@ namespace CatchMeIfYouCan
         public Cell[,] game_field; // Cell - клетка
         public int field_sizeI;
         public int field_sizeJ;
-        public int foodcount/*plantCount*/;
+        public int foodCount;
 
         public GameField(int field_sizeI, int field_sizeJ)
         { 
             this.field_sizeI = field_sizeI;
             this.field_sizeJ = field_sizeJ;
             this.game_field = new Cell[field_sizeI, field_sizeJ];
-            this.foodcount = (int) (field_sizeI * field_sizeJ / 3);
+            this.foodCount = (int) (field_sizeI * field_sizeJ / 3);
         }
 
         private Point Random(int key)
@@ -57,15 +57,15 @@ namespace CatchMeIfYouCan
             return point;
         }
 
-        private void RandomPlants()
+        private void RandomFoods()
         {
             Point point;
 
-            for (int t = 0; t < foodcount; t++)
+            for (int t = 0; t < foodCount; t++)
             {
                 do
                     point = Random((int)DateTime.Now.Ticks);
-                while (game_field[point.X, point.Y].IsPlant);
+                while (game_field[point.X, point.Y].IsFood);
 
                 game_field[point.X, point.Y] = new Cell(1, 0, 0, 0);
             }
@@ -80,7 +80,7 @@ namespace CatchMeIfYouCan
                     game_field[i, j] = new Cell(0, 1, 0, 0);
                 }
             }
-            RandomPlants();
+            RandomFoods();
         }
 
         public void Game_Field_Paint(Graphics PictureBoxGraph, Graphics BitmapGraph, Bitmap Frame)
@@ -110,14 +110,14 @@ namespace CatchMeIfYouCan
 
     class Cell : Main
     {
-        public bool IsPlant = false; // 1 stge 
+        public bool IsFood = false; // 1 stge 
         public bool IsGrace = false; // 2 stage
         public bool IsEatten = false; // 3 stage
         public bool IsOccupied = false;
 
-        public Cell(int IsPlant, int IsGrace, int IsEatten, int IsOccurpied) 
+        public Cell(int IsFood, int IsGrace, int IsEatten, int IsOccurpied) 
         {
-            if (IsPlant == 1) { this.IsPlant = true; this.image = Counts.GetGallery()[0]; } 
+            if (IsFood == 1) { this.IsFood = true; this.image = Counts.GetGallery()[0]; } 
             if (IsGrace == 1) { this.IsGrace = true; this.image = Counts.GetGallery()[1]; }
             if (IsEatten == 1) { this.IsEatten = true; this.image = Counts.GetGallery()[2]; }
             if (IsOccurpied == 1) { this.IsOccupied = true; }
